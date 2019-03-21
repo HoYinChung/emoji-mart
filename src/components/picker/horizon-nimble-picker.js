@@ -11,7 +11,7 @@ import { uncompress } from '../../utils/data'
 import { PickerPropTypes } from '../../utils/shared-props'
 
 import Anchors from '../anchors'
-import Category from '../category'
+import HorizonCategory from '../horizon-category'
 import Preview from '../preview'
 import Search from '../search'
 import { PickerDefaultProps } from '../../utils/shared-default-props'
@@ -45,7 +45,7 @@ const I18N = {
   },
 }
 
-export default class NimblePicker extends React.PureComponent {
+export default class HorizonNimblePicker extends React.PureComponent {
   constructor(props) {
     super(props)
 
@@ -215,6 +215,7 @@ export default class NimblePicker extends React.PureComponent {
     )
 
     this.hasStickyPosition = !!stickyTestElement.style.position.length
+    console.log('hasStickyPosition', this.hasStickyPosition);
   }
 
   handleEmojiOver(emoji) {
@@ -271,6 +272,7 @@ export default class NimblePicker extends React.PureComponent {
         this.handleScrollPaint()
 
         if (this.SEARCH_CATEGORY.emojis) {
+          console.log('this.SEARCH_CATEGORY.emojis', this.SEARCH_CATEGORY.emojis);
           component.updateDisplay('none')
         }
       })
@@ -284,6 +286,65 @@ export default class NimblePicker extends React.PureComponent {
     }
   }
 
+  handleScrollPaint() {
+    this.waitingForPaint = false
+
+    if (!this.scroll) {
+      return
+    }
+
+    let activeCategory = null
+
+    if (this.SEARCH_CATEGORY.emojis) {
+      activeCategory = this.SEARCH_CATEGORY
+    } else {
+      var target = this.scroll,
+        scrollLeft = target.scrollLeft,
+        scrollingDown = scrollLeft > (this.scrollLeft || 0),
+        minTop = 0
+
+      for (let i = 0, l = this.categories.length; i < l; i++) {
+        let ii = scrollingDown ? this.categories.length - 1 - i : i,
+          category = this.categories[ii],
+          component = this.categoryRefs[`category-${ii}`]
+
+        if (component) {
+          let active = component.handleScroll(scrollLeft)
+
+          if (!minTop || component.left < minTop) {
+            if (component.left > 0) {
+              minTop = component.left
+            }
+          }
+
+          if (active && !activeCategory) {
+            activeCategory = category
+          }
+        }
+      }
+      console.log('SCROLLLL', minTop, scrollLeft, this.clientWidth, this.scrollWidth);
+      if (scrollLeft < minTop) {
+        activeCategory = this.categories.filter(
+          (category) => !(category.anchor === false),
+        )[0]
+      } else if (scrollLeft + this.clientWidth >= this.scrollWidth) {
+        activeCategory = this.categories[this.categories.length - 1]
+      }
+    }
+
+    if (activeCategory) {
+      let { anchors } = this,
+        { name: categoryName } = activeCategory
+
+      if (anchors.state.selected != categoryName) {
+        anchors.setState({ selected: categoryName })
+      }
+    }
+
+    this.scrollLeft = scrollLeft
+  }
+
+  /*
   handleScrollPaint() {
     this.waitingForPaint = false
 
@@ -341,6 +402,7 @@ export default class NimblePicker extends React.PureComponent {
 
     this.scrollTop = scrollTop
   }
+  */
 
   handleSearch(emojis) {
     this.SEARCH_CATEGORY.emojis = emojis
@@ -349,13 +411,14 @@ export default class NimblePicker extends React.PureComponent {
       let component = this.categoryRefs[`category-${i}`]
 
       if (component && component.props.name != 'Search') {
-        let display = emojis ? 'none' : 'inherit'
+        console.log(component.props.name);
+        let display = emojis ? 'none' : 'block'
         component.updateDisplay(display)
       }
     }
 
     this.forceUpdate()
-    this.scroll.scrollTop = 0
+    this.scroll.scrollLeft = 0
     this.handleScroll()
   }
 
@@ -366,15 +429,15 @@ export default class NimblePicker extends React.PureComponent {
 
     scrollToComponent = () => {
       if (component) {
-        let { top } = component
+        let { left } = component
 
         if (category.first) {
-          top = 0
+          left = 0
         } else {
-          top += 1
+          left += 1
         }
 
-        scroll.scrollTop = top
+        scroll.scrollLeft = left
       }
     }
 
@@ -435,8 +498,8 @@ export default class NimblePicker extends React.PureComponent {
 
     if (this.scroll) {
       let target = this.scroll
-      this.scrollHeight = target.scrollHeight
-      this.clientHeight = target.clientHeight
+      this.scrollWidth = target.scrollWidth
+      this.clientWidth = target.clientWidth
     }
   }
 
@@ -497,12 +560,13 @@ export default class NimblePicker extends React.PureComponent {
         notFoundEmoji,
       } = this.props,
       { skin } = this.state,
-      width = perLine * (emojiSize + 12) + 12 + 2 + measureScrollbar()
-
+      // width = perLine * (emojiSize + 12) + 12 + 2 + measureScrollbar()
+      width = '100%';
     return (
       <section
         style={{ width: width, ...style }}
-        className="emoji-mart"
+        // style={{ ...style }}
+        className="emoji-mart horizon"
         aria-label={title}
         onKeyDown={this.handleKeyDown}
       >
@@ -537,7 +601,7 @@ export default class NimblePicker extends React.PureComponent {
         >
           {this.getCategories().map((category, i) => {
             return (
-              <Category
+              <HorizonCategory
                 ref={this.setCategoryRef.bind(this, `category-${i}`)}
                 key={category.name}
                 id={category.id}
@@ -611,8 +675,8 @@ export default class NimblePicker extends React.PureComponent {
   }
 }
 
-NimblePicker.propTypes /* remove-proptypes */ = {
+HorizonNimblePicker.propTypes /* remove-proptypes */ = {
   ...PickerPropTypes,
   data: PropTypes.object.isRequired,
 }
-NimblePicker.defaultProps = { ...PickerDefaultProps }
+HorizonNimblePicker.defaultProps = { ...PickerDefaultProps }

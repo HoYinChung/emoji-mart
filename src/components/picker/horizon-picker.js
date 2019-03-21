@@ -12,5 +12,5 @@ export default class HorizonPicker extends React.PureComponent {
   }
 }
 
-Picker.propTypes /* remove-proptypes */ = PickerPropTypes
-Picker.defaultProps = { ...PickerDefaultProps, data }
+HorizonPicker.propTypes /* remove-proptypes */ = PickerPropTypes
+HorizonPicker.defaultProps = { ...PickerDefaultProps, data }
