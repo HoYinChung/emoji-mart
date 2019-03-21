@@ -11,8 +11,7 @@ import {
   color,
 } from '@storybook/addon-knobs'
 
-import { Picker, Emoji, emojiIndex, NimbleEmojiIndex, getEmojiDataFromNative } from '../dist'
-import data from '../data/all.json'
+import { Picker, Emoji, emojiIndex, HorizonPicker } from '../dist'
 import '../css/emoji-mart.css'
 
 const SETS = ['apple', 'google', 'twitter', 'emojione', 'messenger', 'facebook']
@@ -216,61 +215,24 @@ storiesOf('Headless Search', module)
     )
   })
 
-  .add('With skin tone from store', () => {
-    const nimbleEmojiIndex = new NimbleEmojiIndex(data)
-    let results = nimbleEmojiIndex.search(text('Search', 'thumbs'), {
-      custom: CUSTOM_EMOJIS,
-    })
-    if (!results) {
-      return null
-    }
-
-    return (
-      <div>
-        {results.map((emoji) => {
-          return (
-            <span key={emoji.id} style={{ marginLeft: '1.4em' }}>
-              <Emoji
-                native={true}
-                emoji={emoji}
-                skin={emoji.skin || 1}
-                size={48}
-              />
-            </span>
-          )
-        })}
-      </div>
-    )
-  })
-
-storiesOf('Get emoji data from Native', module)
+  storiesOf('Horizon Picker', module)
   .addDecorator(withKnobs)
-  .add('Default', () => {
-    const emojiData = getEmojiDataFromNative(
-      text('Unicode', '🏋🏿‍♂️'),
-      select('Emoji pack', SETS, SETS[0]),
-      data
-    )
-    if (!emojiData) {
-      return (
-        <div>
-          Couldn`t find any emoji data from native...
-        </div>
-      )
-    }
-
-    return (
-      <div>
-        <Emoji
-          emoji={emojiData}
-          set={select('Emoji pack', SETS, SETS[0])}
-          skin={emojiData.skin || 1}
-          size={48}
-        />
-
-        <pre>
-          emojiData: {JSON.stringify(emojiData, null, 2)}
-        </pre>
-      </div>
-    )
-  })
+  .add('Default', () => (
+    <HorizonPicker
+      onClick={action('clicked')}
+      onSelect={action('selected')}
+      onSkinChange={action('skin changed')}
+      native={boolean('Unicode', true)}
+      set={select('Emoji pack', SETS, SETS[0])}
+      emojiSize={number('Emoji size', 24)}
+      perLine={number('Per line', 9)}
+      title={text('Idle text', 'Your Title Here')}
+      emoji={text('Idle emoji', 'department_store')}
+      notFoundEmoji={text('Not found emoji', 'sleuth_or_spy')}
+      defaultSkin={number('Default skin tone', 1)}
+      color={color('Highlight color', '#ae65c5')}
+      showPreview={boolean('Show preview', true)}
+      showSkinTones={boolean('Show skin tones', true)}
+      custom={CUSTOM_EMOJIS}
+    />
+  ))
