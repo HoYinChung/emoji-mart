@@ -11,7 +11,7 @@ import {
   color,
 } from '@storybook/addon-knobs'
 
-import { Picker, Emoji, emojiIndex } from '../dist'
+import { Picker, Emoji, emojiIndex, HorizonPicker } from '../dist'
 import '../css/emoji-mart.css'
 
 const SETS = ['apple', 'google', 'twitter', 'emojione', 'messenger', 'facebook']
@@ -214,3 +214,25 @@ storiesOf('Headless Search', module)
       </div>
     )
   })
+
+  storiesOf('Horizon Picker', module)
+  .addDecorator(withKnobs)
+  .add('Default', () => (
+    <HorizonPicker
+      onClick={action('clicked')}
+      onSelect={action('selected')}
+      onSkinChange={action('skin changed')}
+      native={boolean('Unicode', true)}
+      set={select('Emoji pack', SETS, SETS[0])}
+      emojiSize={number('Emoji size', 24)}
+      perLine={number('Per line', 9)}
+      title={text('Idle text', 'Your Title Here')}
+      emoji={text('Idle emoji', 'department_store')}
+      notFoundEmoji={text('Not found emoji', 'sleuth_or_spy')}
+      defaultSkin={number('Default skin tone', 1)}
+      color={color('Highlight color', '#ae65c5')}
+      showPreview={boolean('Show preview', true)}
+      showSkinTones={boolean('Show skin tones', true)}
+      custom={CUSTOM_EMOJIS}
+    />
+  ))
