@@ -6,7 +6,8 @@
   align-content: flex-start;
   height: 180px;
   overflow-y: hidden;
-  overflow-x: auto;
+  overflow-x: scroll;
+  -webkit-overflow-scrolling: touch;
 }
 
 .horizon .emoji-mart-category-list {
