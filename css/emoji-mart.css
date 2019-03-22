@@ -413,30 +413,3 @@
   border: 0;
 }
 
-.horizon .emoji-mart-scroll {
-  display: flex;
-  flex-wrap: wrap;
-  flex-direction: column;
-  align-content: flex-start;
-  height: 300px;
-  overflow-y: auto;
-  overflow-x: auto;
-}
-
-.horizon .emoji-mart-category-list {
-  display: flex;
-  flex-wrap: wrap;
-  flex-direction: column;
-  align-content: flex-start;
-  height: 240px;
-}
-
-.horizon .emoji-mart-category-label {
-  left: 0;
-  display: inline-block;
-}
-
-.horizon .emoji-mart-category-label span {
-  display: inline-block;
-  width: auto;
-}

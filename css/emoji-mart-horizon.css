@@ -1,0 +1,28 @@
+
+.horizon .emoji-mart-scroll {
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: column;
+  align-content: flex-start;
+  height: 180px;
+  overflow-y: hidden;
+  overflow-x: auto;
+}
+
+.horizon .emoji-mart-category-list {
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: column;
+  align-content: flex-start;
+  height: 144px;
+}
+
+.horizon .emoji-mart-category-label {
+  left: 0;
+  display: inline-block;
+}
+
+.horizon .emoji-mart-category-label span {
+  display: inline-block;
+  width: auto;
+}
