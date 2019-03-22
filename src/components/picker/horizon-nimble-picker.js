@@ -344,66 +344,6 @@ export default class HorizonNimblePicker extends React.PureComponent {
     this.scrollLeft = scrollLeft
   }
 
-  /*
-  handleScrollPaint() {
-    this.waitingForPaint = false
-
-    if (!this.scroll) {
-      return
-    }
-
-    let activeCategory = null
-
-    if (this.SEARCH_CATEGORY.emojis) {
-      activeCategory = this.SEARCH_CATEGORY
-    } else {
-      var target = this.scroll,
-        scrollTop = target.scrollTop,
-        scrollingDown = scrollTop > (this.scrollTop || 0),
-        minTop = 0
-
-      for (let i = 0, l = this.categories.length; i < l; i++) {
-        let ii = scrollingDown ? this.categories.length - 1 - i : i,
-          category = this.categories[ii],
-          component = this.categoryRefs[`category-${ii}`]
-
-        if (component) {
-          let active = component.handleScroll(scrollTop)
-
-          if (!minTop || component.top < minTop) {
-            if (component.top > 0) {
-              minTop = component.top
-            }
-          }
-
-          if (active && !activeCategory) {
-            activeCategory = category
-          }
-        }
-      }
-
-      if (scrollTop < minTop) {
-        activeCategory = this.categories.filter(
-          (category) => !(category.anchor === false),
-        )[0]
-      } else if (scrollTop + this.clientHeight >= this.scrollHeight) {
-        activeCategory = this.categories[this.categories.length - 1]
-      }
-    }
-
-    if (activeCategory) {
-      let { anchors } = this,
-        { name: categoryName } = activeCategory
-
-      if (anchors.state.selected != categoryName) {
-        anchors.setState({ selected: categoryName })
-      }
-    }
-
-    this.scrollTop = scrollTop
-  }
-  */
-
   handleSearch(emojis) {
     this.SEARCH_CATEGORY.emojis = emojis
 
