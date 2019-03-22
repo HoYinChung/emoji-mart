@@ -13,6 +13,7 @@ import {
 
 import { Picker, Emoji, emojiIndex, HorizonPicker } from '../dist'
 import '../css/emoji-mart.css'
+import '../css/emoji-mart-horizon.css'
 
 const SETS = ['apple', 'google', 'twitter', 'emojione', 'messenger', 'facebook']
 const CUSTOM_EMOJIS = [
@@ -219,6 +220,7 @@ storiesOf('Headless Search', module)
   .addDecorator(withKnobs)
   .add('Default', () => (
     <HorizonPicker
+      exclude={['search']}
       onClick={action('clicked')}
       onSelect={action('selected')}
       onSkinChange={action('skin changed')}
