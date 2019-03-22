@@ -87,6 +87,7 @@ export default class HorizonNimblePicker extends React.PureComponent {
     }
 
     this.hideRecent = true
+    this.hideSearch = true
 
     if (props.include != undefined) {
       allCategories.sort((a, b) => {
@@ -158,7 +159,18 @@ export default class HorizonNimblePicker extends React.PureComponent {
       this.categories[0].first = true
     }
 
-    this.categories.unshift(this.SEARCH_CATEGORY)
+    let includeSearch =
+      props.include && props.include.length
+        ? props.include.indexOf(this.SEARCH_CATEGORY.id) > -1
+        : true
+    let excludeSearch =
+      props.exclude && props.exclude.length
+        ? props.exclude.indexOf(this.SEARCH_CATEGORY.id) > -1
+        : false
+    if (includeSearch && !excludeSearch) {
+      this.hideSearch = false
+      this.categories.unshift(this.SEARCH_CATEGORY)
+    }
 
     this.setAnchorsRef = this.setAnchorsRef.bind(this)
     this.handleAnchorClick = this.handleAnchorClick.bind(this)
@@ -215,7 +227,6 @@ export default class HorizonNimblePicker extends React.PureComponent {
     )
 
     this.hasStickyPosition = !!stickyTestElement.style.position.length
-    console.log('hasStickyPosition', this.hasStickyPosition);
   }
 
   handleEmojiOver(emoji) {
@@ -272,7 +283,6 @@ export default class HorizonNimblePicker extends React.PureComponent {
         this.handleScrollPaint()
 
         if (this.SEARCH_CATEGORY.emojis) {
-          console.log('this.SEARCH_CATEGORY.emojis', this.SEARCH_CATEGORY.emojis);
           component.updateDisplay('none')
         }
       })
@@ -322,7 +332,6 @@ export default class HorizonNimblePicker extends React.PureComponent {
           }
         }
       }
-      console.log('SCROLLLL', minTop, scrollLeft, this.clientWidth, this.scrollWidth);
       if (scrollLeft < minTop) {
         activeCategory = this.categories.filter(
           (category) => !(category.anchor === false),
@@ -351,7 +360,6 @@ export default class HorizonNimblePicker extends React.PureComponent {
       let component = this.categoryRefs[`category-${i}`]
 
       if (component && component.props.name != 'Search') {
-        console.log(component.props.name);
         let display = emojis ? 'none' : 'block'
         component.updateDisplay(display)
       }
@@ -522,17 +530,20 @@ export default class HorizonNimblePicker extends React.PureComponent {
           />
         </div>
 
-        <Search
-          ref={this.setSearchRef}
-          onSearch={this.handleSearch}
-          data={this.data}
-          i18n={this.i18n}
-          emojisToShowFilter={emojisToShowFilter}
-          include={include}
-          exclude={exclude}
-          custom={this.CUSTOM_CATEGORY.emojis}
-          autoFocus={autoFocus}
-        />
+        {
+          !this.hideSearch &&
+          <Search
+            ref={this.setSearchRef}
+            onSearch={this.handleSearch}
+            data={this.data}
+            i18n={this.i18n}
+            emojisToShowFilter={emojisToShowFilter}
+            include={include}
+            exclude={exclude}
+            custom={this.CUSTOM_CATEGORY.emojis}
+            autoFocus={autoFocus}
+          />
+        }
 
         <div
           ref={this.setScrollRef}

@@ -77,19 +77,12 @@ export default class HorizonCategory extends React.Component {
 
     this.left = left - parentLeft + parent.scrollLeft
     this.maxMargin = width;
-    // if (width == 0) {
-    //   this.maxMargin = 0
-    // } else {
-    //   this.maxMargin = width - labelWidth
-    // }
   }
 
   handleScroll(scrollLeft) {
-    // console.log('handleScroll', scrollLeft, this.left);
     var margin = scrollLeft - this.left
     margin = margin < this.minMargin ? this.minMargin : margin
     margin = margin > this.maxMargin ? this.maxMargin : margin
-    // console.log('margin 92', margin, this.margin);
     if (margin == this.margin) return
 
     if (!this.props.hasStickyPosition) {
