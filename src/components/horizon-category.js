@@ -202,7 +202,7 @@ export default class HorizonCategory extends React.Component {
           </span>
         </div>
 
-        <ul className="emoji-mart-category-list" style={{width: `${emojis ? Math.ceil(emojis.length/6) * 36 : 0}px`}}>
+        <ul className="emoji-mart-category-list" style={{width: `${emojis ? Math.ceil(emojis.length/4) * 36 : 0}px`}}>
           {emojis &&
             emojis.map((emoji) => (
               <li key={emoji.id || emoji}>
